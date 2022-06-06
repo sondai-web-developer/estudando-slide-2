@@ -7,6 +7,10 @@ function slide(){
     let distMovement = 0;
     let distMovePosition = 0;
 
+    let slideArray = [];
+
+    let slideIndex = {};
+
     function moveSlide(distX){
         distMovePosition = distX;
         lista.style.transform = `translate3d(${distX}px, 0, 0)`;
@@ -49,8 +53,47 @@ function slide(){
         wrapper.addEventListener('touchend', onEnd);
     }
 
+    /*Slide config*/
+
+    function slidePosition(slide){
+        const margin = (wrapper.offsetWidth - slide.offsetWidth) / 2;
+        return -(slide.offsetLeft - margin);
+    }
+
+    function slidesConfig(){
+        slideArray = [...lista.children].map((element) => {
+            const position = slidePosition(element);
+            return { position, element }
+        });
+
+        return slideArray;
+    }
+
+    function slideIndexNav(index){
+        const slideArray = slidesConfig();
+        const last = slideArray.length - 1;
+
+        slideIndex = {
+            prev: index ? index - 1 : undefined,
+            active: index,
+            next: index === last ? undefined : index + 1,
+        }
+    }
+
+    function changeSlide(index){
+        const slideArray = slidesConfig()[index];
+        moveSlide(slideArray.position);
+        slideIndexNav(index);
+        distFinalPosition = slideArray.position;
+    }
+
+    changeSlide(3);
+
+    /*Slide config*/
+
     function init(){
         addSlideEvents();
+        slidesConfig();
     }
 
     init();
