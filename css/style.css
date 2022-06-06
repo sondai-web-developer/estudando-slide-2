@@ -1,0 +1,39 @@
+/*Reset*/
+
+body, ul, li{
+    padding:0px;
+    margin:0px;
+}
+
+li{
+    list-style: none;
+}
+
+img{
+    display: block;
+    max-width: 100%;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+/*Reset*/
+
+/*Introdução*/
+
+#slide_wrapper{
+    overflow: hidden;
+}
+
+#slide_lista{
+    display: flex;
+    transform: translate3d(0, 0, 0);
+}
+
+.slide_item{
+    flex-shrink: 0;
+    width:100vw;
+}
+
+/*Introdução*/
