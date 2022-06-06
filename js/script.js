@@ -11,9 +11,8 @@ function slide(){
 
     let slideIndex = {};
 
-    let slideCurrent = 0;
-
-    let stopCarousel = 0;
+    let i = 0;
+    let carousel;
 
     function moveSlide(distX){
         distMovePosition = distX;
@@ -55,8 +54,10 @@ function slide(){
         wrapper.addEventListener('touchstart', onStart);
         wrapper.addEventListener('mouseup', onEnd);
         wrapper.addEventListener('touchend', onEnd);
-        wrapper.addEventListener('mouseenter', cancelCarousel);
-        wrapper.addEventListener('touchstart', cancelCarousel);
+
+        wrapper.addEventListener('mouseenter', stopCarousel);
+        wrapper.addEventListener('mouseleave', continueCarousel);
+        wrapper.addEventListener('touchstart', stopCarousel);
     }
 
     /*Slide config*/
@@ -99,25 +100,31 @@ function slide(){
 
     /*Slide carousel*/
 
-    function slideCarousel(){
-        slideCurrent++;
+    function startCarousel(){
+        const slideTotal = slidesConfig().length - 1;
 
-        if(slideCurrent > slidesConfig().length - 1){
-            slideCurrent = 0;
-        }
+        carousel = setInterval(() => {
+            changeSlide(i);
+            i++;
 
-        changeSlide(slideCurrent);
+            if(i > slideTotal){
+                i = 0;
+            }
+        }, 5000);
     }
 
-    stopCarousel = setInterval(slideCarousel, 5000);
+    function stopCarousel(){
+        clearInterval(carousel);
+    }
 
-    function cancelCarousel(){
-        clearInterval(stopCarousel);
+    function continueCarousel(){
+        startCarousel();
     }
 
     /*Slide carousel*/
 
     function init(){
+        startCarousel();
         addSlideEvents();
         slidesConfig();
     }
