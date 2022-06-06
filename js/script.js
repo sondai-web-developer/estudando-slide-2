@@ -11,6 +11,10 @@ function slide(){
 
     let slideIndex = {};
 
+    let slideCurrent = 0;
+
+    let stopCarousel = 0;
+
     function moveSlide(distX){
         distMovePosition = distX;
         lista.style.transform = `translate3d(${distX}px, 0, 0)`;
@@ -51,6 +55,8 @@ function slide(){
         wrapper.addEventListener('touchstart', onStart);
         wrapper.addEventListener('mouseup', onEnd);
         wrapper.addEventListener('touchend', onEnd);
+        wrapper.addEventListener('mouseenter', cancelCarousel);
+        wrapper.addEventListener('touchstart', cancelCarousel);
     }
 
     /*Slide config*/
@@ -87,9 +93,29 @@ function slide(){
         distFinalPosition = slideArray.position;
     }
 
-    changeSlide(3);
+    changeSlide(0);
 
     /*Slide config*/
+
+    /*Slide carousel*/
+
+    function slideCarousel(){
+        slideCurrent++;
+
+        if(slideCurrent > slidesConfig().length - 1){
+            slideCurrent = 0;
+        }
+
+        changeSlide(slideCurrent);
+    }
+
+    stopCarousel = setInterval(slideCarousel, 5000);
+
+    function cancelCarousel(){
+        clearInterval(stopCarousel);
+    }
+
+    /*Slide carousel*/
 
     function init(){
         addSlideEvents();
