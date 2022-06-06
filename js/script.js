@@ -11,8 +11,11 @@ function slide(){
 
     let slideIndex = {};
 
-    let i = 0;
     let carousel;
+
+    function transition(active){
+        lista.style.transition = active ? 'transform .3s' : '';
+    }
 
     function moveSlide(distX){
         distMovePosition = distX;
@@ -35,6 +38,7 @@ function slide(){
             movetype = 'touchmove';
         }
         wrapper.addEventListener(movetype, onMove);
+        transition(false);
     }
 
     function onMove(event){
@@ -47,6 +51,18 @@ function slide(){
         const movetype = (event.type === 'mouseup') ? 'mousemove' : 'touchmove';
         wrapper.removeEventListener(movetype, onMove);
         distFinalPosition = distMovePosition;
+        transition(true);
+        changeSlideOnEnd();
+    }
+
+    function changeSlideOnEnd(){
+        if(distMovement > 120 && slideIndex.next !== undefined){
+            activeNextSlide();
+        }else if(distMovement < -120 && slideIndex.prev !== undefined){
+            activePrevSlide();
+        } else {
+            changeSlide(slideIndex.active);
+        }
     }
 
     function addSlideEvents(){
@@ -94,7 +110,13 @@ function slide(){
         distFinalPosition = slideArray.position;
     }
 
-    changeSlide(0);
+    function activePrevSlide(){
+        if(slideIndex.prev !== undefined) changeSlide(slideIndex.prev);
+    }
+
+    function activeNextSlide(){
+        if(slideIndex.next !== undefined) changeSlide(slideIndex.next);
+    }
 
     /*Slide config*/
 
@@ -102,13 +124,12 @@ function slide(){
 
     function startCarousel(){
         const slideTotal = slidesConfig().length - 1;
-
         carousel = setInterval(() => {
-            changeSlide(i);
-            i++;
+            changeSlide(slideIndex.active);
+            slideIndex.active++;
 
-            if(i > slideTotal){
-                i = 0;
+            if(slideIndex.active > slideTotal){
+                slideIndex.active = 0;
             }
         }, 5000);
     }
@@ -124,9 +145,11 @@ function slide(){
     /*Slide carousel*/
 
     function init(){
-        startCarousel();
+        transition(true);
         addSlideEvents();
         slidesConfig();
+        changeSlide(0);
+        startCarousel();
     }
 
     init();
