@@ -28,7 +28,6 @@ img{
 
 #slide_lista{
     display: flex;
-    transform: translate3d(0, 0, 0);
 }
 
 .slide_item{
