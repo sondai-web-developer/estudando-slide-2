@@ -14,6 +14,10 @@ img{
     max-width: 100%;
 }
 
+a{
+    display: block;
+}
+
 *{
     box-sizing: border-box;
 }
@@ -33,6 +37,30 @@ img{
 .slide_item{
     flex-shrink: 0;
     width:100vw;
+}
+
+[data-control="slide"]{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    top:-20px;
+}
+
+[data-control="slide"] li a{
+    width: 12px;
+    height: 12px;
+    background: transparent;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    opacity: 80%;
+    overflow: hidden;
+    text-indent: -999px;
+    margin: 0 5px;
+}
+
+[data-control="slide"] li.ativar a{
+    background: #ffffff;
+    opacity: 100%;
 }
 
 /*Introdução*/
