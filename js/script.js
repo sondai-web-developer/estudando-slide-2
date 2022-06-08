@@ -13,6 +13,9 @@ function slide(){
 
     let carousel;
 
+    const prevElement = document.querySelector('[data-arrow-nav="prev"]');
+    const nextElement = document.querySelector('[data-arrow-nav="next"]');
+
     let control;
     let controlArray;
 
@@ -177,6 +180,15 @@ function slide(){
         window.addEventListener('resize', debouncedOnResize);
     }
 
+    /*Navegação*/
+
+    function addArrowEvent(){
+        prevElement.addEventListener('click', activePrevSlide);
+        nextElement.addEventListener('click', activeNextSlide);
+    }
+    
+    /*Navegação*/
+
     /*Paginação*/
 
     function createControl(){
@@ -221,9 +233,10 @@ function slide(){
         transition(true);
         addSlideEvents();
         slidesConfig();
-        changeSlide(0);
         addCarouselEvents();
         addResizeEvent();
+        changeSlide(0);
+        addArrowEvent();
         addControl();
     }
 
