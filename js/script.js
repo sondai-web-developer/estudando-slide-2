@@ -13,6 +13,11 @@ function slide(){
 
     let carousel;
 
+    let control;
+    let controlArray;
+
+    const changeEvent = new Event('changeEvent');
+
     function transition(active){
         lista.style.transition = active ? 'transform .3s' : '';
     }
@@ -104,6 +109,7 @@ function slide(){
         moveSlide(slideArray.position);
         slideIndexNav(index);
         distFinalPosition = slideArray.position;
+        wrapper.dispatchEvent(changeEvent);
     }
 
     function activePrevSlide(){
@@ -127,7 +133,7 @@ function slide(){
             if(slideIndex.active > slideTotal){
                 slideIndex.active = 0;
             }
-        }, 1000);
+        }, 5000);
     }
 
     function stopCarousel(){
@@ -171,6 +177,46 @@ function slide(){
         window.addEventListener('resize', debouncedOnResize);
     }
 
+    /*Paginação*/
+
+    function createControl(){
+        const control = document.createElement('ul');
+        control.dataset.control = 'slide';
+        const slideArray = slidesConfig();
+
+        slideArray.forEach((item, index) => {
+            control.innerHTML += `<li><a href="#slide${index + 1}">${index + 1}</a></li>`;
+        });
+
+        wrapper.appendChild(control);
+
+        return control;
+    }
+
+    function eventControl(item, index){
+        item.addEventListener('click', (event) => {
+            event.preventDefault();
+            changeSlide(index);
+        });
+        wrapper.addEventListener('changeEvent', activeControlItem);
+    }
+
+    function activeControlItem(){
+        controlArray.forEach(item => item.classList.remove('ativar'));
+        controlArray[slideIndex.active].classList.add('ativar');
+    }
+
+    function addControl(customControl){
+        control = document.querySelector(customControl) || createControl();
+        controlArray = [...control.children];
+        activeControlItem();
+        controlArray.forEach((item, index) => {
+            eventControl(item, index);
+        });
+    }
+
+    /*Paginação*/
+
     function init(){
         transition(true);
         addSlideEvents();
@@ -178,6 +224,7 @@ function slide(){
         changeSlide(0);
         addCarouselEvents();
         addResizeEvent();
+        addControl();
     }
 
     init();
