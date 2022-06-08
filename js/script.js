@@ -70,10 +70,6 @@ function slide(){
         wrapper.addEventListener('touchstart', onStart);
         wrapper.addEventListener('mouseup', onEnd);
         wrapper.addEventListener('touchend', onEnd);
-
-        wrapper.addEventListener('mouseenter', stopCarousel);
-        wrapper.addEventListener('mouseleave', continueCarousel);
-        wrapper.addEventListener('touchstart', stopCarousel);
     }
 
     /*Slide config*/
@@ -131,7 +127,7 @@ function slide(){
             if(slideIndex.active > slideTotal){
                 slideIndex.active = 0;
             }
-        }, 5000);
+        }, 1000);
     }
 
     function stopCarousel(){
@@ -142,14 +138,46 @@ function slide(){
         startCarousel();
     }
 
+    function addCarouselEvents(){
+        window.addEventListener('load', startCarousel);
+        wrapper.addEventListener('mouseenter', stopCarousel);
+        wrapper.addEventListener('mouseleave', continueCarousel);
+        wrapper.addEventListener('touchstart', stopCarousel);
+    }
+
     /*Slide carousel*/
+
+    function debounce(callback, delay) {
+        let timer;
+        return (...args) => {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                callback(...args);
+                timer = null;
+            }, delay);
+        };
+    }
+
+    function onResize(){
+        setTimeout(() => {
+            slidesConfig();
+            changeSlide(slideIndex.active);
+        }, 1000);
+    }
+
+    function addResizeEvent(){
+        const debouncedOnResize = debounce(onResize, 200);
+
+        window.addEventListener('resize', debouncedOnResize);
+    }
 
     function init(){
         transition(true);
         addSlideEvents();
         slidesConfig();
         changeSlide(0);
-        startCarousel();
+        addCarouselEvents();
+        addResizeEvent();
     }
 
     init();
