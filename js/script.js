@@ -61,6 +61,7 @@ function slide(){
         distFinalPosition = distMovePosition;
         transition(true);
         changeSlideOnEnd();
+        distMovement = 0;
     }
 
     function changeSlideOnEnd(){
@@ -113,6 +114,8 @@ function slide(){
         slideIndexNav(index);
         distFinalPosition = slideArray.position;
         wrapper.dispatchEvent(changeEvent);
+        checkPrevSlide();
+        checkNextSlide();
     }
 
     function activePrevSlide(){
@@ -182,9 +185,44 @@ function slide(){
 
     /*Navegação*/
 
-    function addArrowEvent(){
+    function activatePrevArrow(){
         prevElement.addEventListener('click', activePrevSlide);
+        prevElement.style.opacity = `100%`;
+        prevElement.style.cursor = 'pointer';
+    }
+
+    function activateNextArrow(){
         nextElement.addEventListener('click', activeNextSlide);
+        nextElement.style.opacity = `100%`;
+        nextElement.style.cursor = 'pointer';
+    }
+
+    function disablePrevArrow(){
+        prevElement.removeEventListener('click', activePrevSlide);
+        prevElement.style.opacity = `30%`;
+        prevElement.style.cursor = 'auto';
+    }
+
+    function disableNextArrow(){
+        nextElement.removeEventListener('click', activeNextSlide);
+        nextElement.style.opacity = `30%`;
+        nextElement.style.cursor = 'auto';
+    }
+
+    function checkPrevSlide(){
+        if(slideIndex.prev === undefined){
+            disablePrevArrow();
+        }else if(slideIndex.prev !== undefined){
+            activatePrevArrow();
+        }
+    }
+
+    function checkNextSlide(){
+        if(slideIndex.next === undefined){
+            disableNextArrow();
+        }else if(slideIndex.next !== undefined){
+            activateNextArrow();
+        }
     }
     
     /*Navegação*/
@@ -236,7 +274,6 @@ function slide(){
         addCarouselEvents();
         addResizeEvent();
         changeSlide(0);
-        addArrowEvent();
         addControl();
     }
 
